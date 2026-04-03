@@ -200,7 +200,7 @@ body.night-theme {
 }
 
 .preloader__progress-wrapper {
-  width: 450px;
+  width: 250px;
   height: 10px;
   background: var(--color-progress-bg);
   border-radius: 50px;
