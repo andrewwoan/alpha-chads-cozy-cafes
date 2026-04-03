@@ -2,6 +2,22 @@ import * as THREE from "three/webgpu";
 import GUI from "lil-gui";
 import { Experience } from "../Experience";
 import gsap from "gsap";
+import {
+  attribute,
+  cameraPosition,
+  color,
+  float,
+  Fn,
+  max,
+  mix,
+  modelWorldMatrix,
+  normalize,
+  positionLocal,
+  smoothstep,
+  sub,
+  uniform,
+  vec4,
+} from "three/tsl";
 
 export class ChadCafe {
   constructor() {
@@ -21,12 +37,76 @@ export class ChadCafe {
 
   initCafe() {
     const intersectObjects = {};
+    this.spotLights = [];
     this.chadcafe.traverse((child) => {
       if (
         child.name.includes("Raycaster") &&
         (child.type === "Group" || child.type === "Object3D")
       ) {
         intersectObjects[child.name] = child;
+      }
+
+      if (
+        child.name.includes("Light") &&
+        (child.type === "Object3D" || child.type === "Group")
+      ) {
+        const worldPos = child.getWorldPosition(new THREE.Vector3());
+        const light = new THREE.SpotLight(
+          "#fffdfb",
+          0,
+          15,
+          Math.PI / 6,
+          0.5,
+          2,
+        );
+        light.position.set(worldPos.x, worldPos.y + 0.25, worldPos.z);
+        light.target.position.set(worldPos.x + 1.5, worldPos.y - 5, worldPos.z);
+        this.experience.sceneA.add(light);
+        this.experience.sceneA.add(light.target);
+        this.spotLights.push(light);
+        // const helper = new THREE.SpotLightHelper(light);
+        // this.experience.sceneA.add(helper);
+
+        const coneHeight = 5;
+        const coneRadius = coneHeight * Math.tan(Math.PI / 6);
+        const topRadius = coneRadius * 0.05;
+        const bottomRadius = coneRadius;
+        const coneGeo = new THREE.CylinderGeometry(
+          topRadius,
+          bottomRadius,
+          coneHeight,
+          32,
+          1,
+          true,
+        );
+        coneGeo.translate(0, -coneHeight / 2, 0);
+
+        const coneMat = new THREE.MeshBasicNodeMaterial({
+          transparent: true,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const lightColor = uniform(color("#fffdfb"));
+        const lightOpacity = uniform(0.0);
+
+        coneMat.colorNode = Fn(() => {
+          const y = positionLocal.y;
+          const fade = smoothstep(float(-coneHeight), float(0), y);
+          return vec4(lightColor, fade.mul(lightOpacity));
+        })();
+
+        coneMat.fragmentNode = coneMat.colorNode;
+
+        const coneMesh = new THREE.Mesh(coneGeo, coneMat);
+        coneMesh.position.set(worldPos.x, worldPos.y + 0.25, worldPos.z);
+        coneMesh.renderOrder = 999;
+        this.experience.sceneA.add(coneMesh);
+
+        light.userData.coneMat = coneMat;
+        light.userData.coneMesh = coneMesh;
+        light.userData.lightOpacity = lightOpacity;
       }
 
       if (child.isMesh) {
@@ -78,6 +158,23 @@ export class ChadCafe {
         pairKey: "youtube",
       },
     ]);
+  }
+
+  setNightMode(isNight) {
+    const targetIntensity = isNight ? 40 : 0;
+    const targetOpacity = isNight ? 0.15 : 0;
+    this.spotLights.forEach((light) => {
+      gsap.to(light, {
+        intensity: targetIntensity,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+      gsap.to(light.userData.lightOpacity, {
+        value: targetOpacity,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    });
   }
 
   initAnimations() {

@@ -82,6 +82,28 @@ export class CapybaraCafe {
     ]);
   }
 
+  setNightMode(isNight) {
+    return;
+    const sun = this.capybaracafe.getObjectByName("Sun");
+    const moon = this.capybaracafe.getObjectByName("Moon");
+
+    if (sun) {
+      gsap.to(sun.rotation, {
+        x: isNight ? Math.PI : 0,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    }
+
+    if (moon) {
+      gsap.to(moon.rotation, {
+        x: isNight ? Math.PI : 0,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    }
+  }
+
   initAnimations() {
     this.trailGroups = [
       {

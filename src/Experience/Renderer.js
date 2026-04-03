@@ -75,8 +75,6 @@ export class Renderer {
 
     const uvNode = uv();
 
-    // Divider line
-
     const distFromSlider = uvNode.x.sub(this.sliderX).abs();
     const influence = smoothstep(float(0.15), float(0.0), distFromSlider);
     const phaseShift = sin(this.time.mul(float(0.3))).mul(float(3.0));
@@ -118,7 +116,6 @@ export class Renderer {
         ),
       );
 
-    // Parabolic bend: max in the middle (y=0.5), zero at top/bottom edges
     const bendCurve = uvNode.y.mul(float(1.0).sub(uvNode.y)).mul(float(4.0)); // peaks at 1.0 in center
     const xOffset = waveX
       .mul(influence)
@@ -139,7 +136,7 @@ export class Renderer {
     );
 
     const lineDist = uvNode.x.sub(this.sliderX.add(xOffset)).abs();
-    const line = smoothstep(float(0.003), float(0.0), lineDist);
+    const line = smoothstep(float(0.002), float(0.0), lineDist);
     this.compositeMaterial = new THREE.NodeMaterial();
     this.compositeMaterial.fragmentNode = mix(
       sceneOutput,
@@ -165,23 +162,15 @@ export class Renderer {
   update() {
     const camera = this.experience.camera.instance;
     this.time.value = this.experience.time.elapsed;
-    console.log(
-      "time:",
-      this.experience.time.elapsed,
-      "amp:",
-      this.amplitude.value,
-    );
+
     if (this.experience.isDraggingSlider) {
       const slider = this.experience.compareSlider;
       const vel = slider ? slider.signedVelocity : 0;
 
-      // Bend OPPOSITE to drag direction
-      const targetBend = vel * 2.5; // negate + scale to taste
+      const targetBend = vel * 2.5;
 
-      // Snappy follow
       this.bend.value += (targetBend - this.bend.value) * 0.2;
 
-      // Amplitude from speed (absolute)
       const speed = Math.abs(vel);
       const velocityAmp = Math.min(speed * 1.2, 0.15);
       const t = this.time.value;
@@ -192,7 +181,6 @@ export class Renderer {
       if (slider) slider.signedVelocity *= 0.85;
     } else {
       this.amplitude.value *= 0.92;
-      // Spring the bend back to center
       this.bend.value *= 0.88;
     }
     this.renderer.setRenderTarget(this.renderTargetA);

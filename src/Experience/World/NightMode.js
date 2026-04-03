@@ -63,6 +63,8 @@ export class NightMode {
     this.updateTheme();
     this.updateLighting(this.chadcafe, this.chadConfig);
     this.updateLighting(this.capybaracafe, this.capybaraConfig);
+    this.chadcafe.setNightMode(this.isNight);
+    this.capybaracafe.setNightMode(this.isNight);
   }
 
   updateTheme() {
