@@ -135,17 +135,17 @@ export class Renderer {
       sampledB,
     );
 
+    this.aspect = uniform(
+      this.experience.sizes.width / this.experience.sizes.height,
+    );
+    const lineWidth = float(0.002).div(this.aspect.min(1.0));
     const lineDist = uvNode.x.sub(this.sliderX.add(xOffset)).abs();
-    const line = smoothstep(float(0.002), float(0.0), lineDist);
+    const line = smoothstep(lineWidth, float(0.0), lineDist);
     this.compositeMaterial = new THREE.NodeMaterial();
     this.compositeMaterial.fragmentNode = mix(
       sceneOutput,
       vec4(1, 1, 1, 1),
       line,
-    );
-
-    this.aspect = uniform(
-      this.experience.sizes.width / this.experience.sizes.height,
     );
 
     const aspectCorrected = vec2(
