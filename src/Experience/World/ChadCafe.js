@@ -38,6 +38,17 @@ export class ChadCafe {
   initCafe() {
     const intersectObjects = {};
     this.spotLights = [];
+
+    this.carParts = [];
+    this.carWheels = [];
+    this.carHeadlights = [];
+    this.carDistanceTraveled = 0;
+    this.carConfig = {
+      startZ: 50,
+      endZ: -30,
+      speed: 0.05,
+    };
+
     this.chadcafe.traverse((child) => {
       if (
         child.name.includes("Raycaster") &&
@@ -48,6 +59,7 @@ export class ChadCafe {
 
       if (
         child.name.includes("Light") &&
+        !child.name.includes("headlight") &&
         (child.type === "Object3D" || child.type === "Group")
       ) {
         const worldPos = child.getWorldPosition(new THREE.Vector3());
@@ -64,8 +76,6 @@ export class ChadCafe {
         this.experience.sceneA.add(light);
         this.experience.sceneA.add(light.target);
         this.spotLights.push(light);
-        // const helper = new THREE.SpotLightHelper(light);
-        // this.experience.sceneA.add(helper);
 
         const coneHeight = 5;
         const coneRadius = coneHeight * Math.tan(Math.PI / 6);
@@ -109,6 +119,65 @@ export class ChadCafe {
         light.userData.lightOpacity = lightOpacity;
       }
 
+      if (child.name === "headlight" || child.name === "headlight001") {
+        const worldPos = child.getWorldPosition(new THREE.Vector3());
+
+        const coneHeight = 2;
+        const coneRadius = coneHeight * Math.tan(Math.PI / 6);
+        const topRadius = coneRadius * 0.01;
+        const bottomRadius = coneRadius;
+        const coneGeo = new THREE.CylinderGeometry(
+          topRadius,
+          bottomRadius,
+          coneHeight,
+          32,
+          1,
+          true,
+        );
+        coneGeo.translate(0, -coneHeight / 2, 0);
+
+        const coneMat = new THREE.MeshBasicNodeMaterial({
+          transparent: true,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        });
+
+        const lightColor = uniform(color("#e9d395"));
+        const lightOpacity = uniform(0.0);
+
+        coneMat.colorNode = Fn(() => {
+          const y = positionLocal.y;
+          const fade = smoothstep(float(-coneHeight), float(0), y);
+          return vec4(lightColor, fade.mul(lightOpacity));
+        })();
+
+        coneMat.fragmentNode = coneMat.colorNode;
+
+        const coneMesh = new THREE.Mesh(coneGeo, coneMat);
+        coneMesh.position.set(worldPos.x, worldPos.y, worldPos.z);
+        coneMesh.rotation.x = Math.PI / 2;
+        coneMesh.renderOrder = 999;
+        this.experience.sceneA.add(coneMesh);
+
+        this.carHeadlights.push({
+          coneMesh,
+          originalZ: worldPos.z,
+          lightOpacity,
+        });
+
+        this.carParts.push(child);
+      }
+
+      if (child.name === "Car") {
+        this.carParts.push(child);
+      }
+
+      if (child.name === "Car_Back_Wheel" || child.name === "Car_Front_Wheel") {
+        this.carParts.push(child);
+        this.carWheels.push(child);
+      }
+
       if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
@@ -119,6 +188,12 @@ export class ChadCafe {
         }
       }
     });
+
+    this.carOriginalPositions = this.carParts.map((part) => ({
+      mesh: part,
+      originalZ: part.position.z,
+    }));
+
     this.experience.sceneA.add(this.chadcafe);
 
     this.experience.raycaster.populateIntersectObjects("A", [
@@ -171,6 +246,15 @@ export class ChadCafe {
       });
       gsap.to(light.userData.lightOpacity, {
         value: targetOpacity,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    });
+
+    const headlightOpacity = isNight ? 0.15 : 0;
+    this.carHeadlights.forEach((hl) => {
+      gsap.to(hl.lightOpacity, {
+        value: headlightOpacity,
         duration: 1.5,
         ease: "power2.inOut",
       });
@@ -232,7 +316,6 @@ export class ChadCafe {
     this.experience.sceneA.add(this.sunLight.target);
 
     this.lightHelper = new THREE.DirectionalLightHelper(this.sunLight, 15);
-    // this.experience.sceneA.add(this.lightHelper);
   }
 
   initDebug() {
@@ -312,6 +395,37 @@ export class ChadCafe {
           });
         });
         group.hasShown = false;
+      }
+    }
+
+    if (this.carParts.length > 0) {
+      this.carDistanceTraveled += this.carConfig.speed;
+
+      this.carOriginalPositions.forEach(({ mesh, originalZ }) => {
+        mesh.position.z = originalZ - this.carDistanceTraveled;
+      });
+
+      this.carHeadlights.forEach((hl) => {
+        const newZ = hl.originalZ - this.carDistanceTraveled;
+        hl.coneMesh.position.z = newZ;
+      });
+
+      this.carWheels.forEach((wheel) => {
+        wheel.rotation.x -= 0.2;
+      });
+
+      const refZ =
+        this.carOriginalPositions[0].originalZ - this.carDistanceTraveled;
+      if (refZ <= this.carConfig.endZ) {
+        this.carDistanceTraveled = 0;
+
+        this.carOriginalPositions.forEach(({ mesh, originalZ }) => {
+          mesh.position.z = originalZ;
+        });
+
+        this.carHeadlights.forEach((hl) => {
+          hl.coneMesh.position.z = hl.originalZ;
+        });
       }
     }
   }
