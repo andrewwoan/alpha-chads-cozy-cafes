@@ -107,6 +107,17 @@ export class CapybaraCafe {
         ease: "power2.inOut",
       });
     }
+
+    if (this.bgOrbMaterial) {
+      const targetColor = new THREE.Color(isNight ? "#1a2a4a" : "#75a3e4");
+      gsap.to(this.bgOrbMaterial.color, {
+        r: targetColor.r,
+        g: targetColor.g,
+        b: targetColor.b,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    }
   }
 
   initAnimations() {
@@ -219,11 +230,11 @@ export class CapybaraCafe {
 
   initBgOrb() {
     const geometry = new THREE.SphereGeometry(500, 32, 16);
-    const material = new THREE.MeshBasicMaterial({
+    this.bgOrbMaterial = new THREE.MeshBasicMaterial({
       color: "#75a3e4",
       side: THREE.BackSide,
     });
-    const sphere = new THREE.Mesh(geometry, material);
+    const sphere = new THREE.Mesh(geometry, this.bgOrbMaterial);
     this.experience.sceneB.add(sphere);
   }
 
