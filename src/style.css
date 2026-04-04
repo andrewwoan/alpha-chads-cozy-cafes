@@ -239,10 +239,14 @@ body.night-theme {
   border-radius: 999px;
   position: relative;
   transition: background 0.4s ease;
+  outline: 3px solid black;
+  inset: -2px;
 }
 
 .night-toggle__track--night {
   background: #1a2a6c;
+  outline: 3px solid black;
+  inset: -2px;
 }
 
 .night-toggle__thumb {
@@ -254,6 +258,7 @@ body.night-theme {
   background: white;
   border-radius: 50%;
   transition: transform 0.4s ease;
+  outline: 3px solid black;
 }
 
 .night-toggle__thumb--night {
