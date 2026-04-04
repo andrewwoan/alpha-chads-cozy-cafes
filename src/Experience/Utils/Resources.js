@@ -24,6 +24,13 @@ export class Resources extends EventEmitter {
         this.loaders.gltfLoader.load(asset.path, (file) => {
           this.singleAssetLoaded(asset.name, file);
         });
+      } else if (asset.type === "imageTexture") {
+        this.loaders.imageBitmapLoader.load(asset.path, (imageBitmap) => {
+          const texture = new THREE.Texture(imageBitmap);
+          texture.colorSpace = THREE.SRGBColorSpace;
+          texture.needsUpdate = true;
+          this.singleAssetLoaded(asset.name, texture);
+        });
       }
     }
   }

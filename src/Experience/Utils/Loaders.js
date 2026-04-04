@@ -14,5 +14,7 @@ export class Loaders {
     this.loaders.dracoLoader = new DRACOLoader();
     this.loaders.dracoLoader.setDecoderPath("/draco/");
     this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader);
+    this.loaders.imageBitmapLoader = new THREE.ImageBitmapLoader();
+    this.loaders.imageBitmapLoader.setOptions({ imageOrientation: "flipY" });
   }
 }

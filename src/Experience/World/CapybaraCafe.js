@@ -72,6 +72,16 @@ export class CapybaraCafe {
           child.scale.set(0, 0, 0);
           this.trails.push(child);
         }
+
+        if (child.material && child.material.name === "Project 1") {
+          child.material.map = this.experience.resources.items.Project_1;
+          child.material.needsUpdate = true;
+        }
+
+        if (child.material && child.material.name === "Project 2") {
+          child.material.map = this.experience.resources.items.Project_2;
+          child.material.needsUpdate = true;
+        }
       }
     });
     this.experience.sceneB.add(this.capybaracafe);

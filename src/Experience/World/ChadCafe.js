@@ -63,14 +63,14 @@ export class ChadCafe {
         this.areaLight = new THREE.SpotLight(
           "#fffdfb",
           0,
-          20,
-          Math.PI / 3,
+          10,
+          Math.PI / 6,
           1,
-          1.5,
+          0.5,
         );
-        this.areaLight.position.set(worldPos.x + 2, worldPos.y, worldPos.z);
+        this.areaLight.position.set(worldPos.x, worldPos.y + 0.5, worldPos.z);
         this.areaLight.target.position.set(
-          worldPos.x + 2,
+          worldPos.x + 0.5,
           worldPos.y - 1,
           worldPos.z,
         );
@@ -208,6 +208,16 @@ export class ChadCafe {
         if (child.name.includes("Trail")) {
           child.scale.set(0, 0, 0);
           this.trails.push(child);
+        }
+
+        if (child.material && child.material.name === "Project 3") {
+          child.material.map = this.experience.resources.items.Project_3;
+          child.material.needsUpdate = true;
+        }
+
+        if (child.material && child.material.name === "Project 4") {
+          child.material.map = this.experience.resources.items.Project_4;
+          child.material.needsUpdate = true;
         }
       }
     });
