@@ -157,9 +157,9 @@ body.night-theme {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 2px;
+  width: 3px;
   height: 100%;
-  background: white;
+  background: rgb(0, 0, 0);
   /* background: transparent; */
   pointer-events: none;
   transition: background 0.8s ease;

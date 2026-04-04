@@ -150,7 +150,11 @@ export class CapybaraCafe {
     ];
 
     this.trails.forEach((trail) => {
+      console.log(trail.name);
+
       const index = parseInt(trail.name.split("Trail")[1]) - 1;
+      console.log(index);
+
       if (this.trailGroups[index]) {
         this.trailGroups[index].trails.push(trail);
       }
