@@ -38,7 +38,7 @@ body {
 }
 
 .corner-info__text {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--color-corner-text);
   transition: color 0.8s ease;
   line-height: 1.2;
@@ -46,7 +46,7 @@ body {
 }
 
 .corner-info__clock {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--color-corner-text);
   transition: color 0.8s ease;
   opacity: 0.8;
