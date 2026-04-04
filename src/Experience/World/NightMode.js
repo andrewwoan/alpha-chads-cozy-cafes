@@ -12,7 +12,6 @@ export class NightMode {
     this.toggles = document.querySelectorAll(".night-toggle");
     this.tracks = document.querySelectorAll(".night-toggle__track");
     this.thumbs = document.querySelectorAll(".night-toggle__thumb");
-    this.icons = document.querySelectorAll(".night-toggle__icon");
 
     this.chadConfig = {
       day: {
@@ -78,9 +77,6 @@ export class NightMode {
     });
     this.thumbs.forEach((thumb) => {
       thumb.classList.toggle("night-toggle__thumb--night", this.isNight);
-    });
-    this.icons.forEach((icon) => {
-      icon.textContent = this.isNight ? "🌙" : "☀️";
     });
   }
 

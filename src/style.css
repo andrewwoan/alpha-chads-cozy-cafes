@@ -264,7 +264,3 @@ body.night-theme {
 .night-toggle__thumb--night {
   transform: translateX(24px);
 }
-
-.night-toggle__icon {
-  font-size: 18px;
-}
