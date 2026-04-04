@@ -31,6 +31,30 @@ export class CapybaraCafe {
         intersectObjects[child.name] = child;
       }
 
+      if (child.name === "arealight001") {
+        console.log("FOUND");
+        const worldPos = child.getWorldPosition(new THREE.Vector3());
+
+        this.areaLight = new THREE.SpotLight(
+          "#fffdfb",
+          0,
+          20,
+          Math.PI / 3,
+          1,
+          1.5,
+        );
+        this.areaLight.position.set(worldPos.x + 2, worldPos.y, worldPos.z);
+        this.areaLight.target.position.set(
+          worldPos.x + 2,
+          worldPos.y - 1,
+          worldPos.z,
+        );
+        this.experience.sceneB.add(this.areaLight);
+        this.experience.sceneB.add(this.areaLight.target);
+        // this.areaLightHelper = new THREE.SpotLightHelper(this.areaLight);
+        // this.experience.sceneA.add(this.areaLightHelper);
+      }
+
       if (child.type === "Group") {
         if (child.name.includes("Moon")) {
           this.moon = child;
@@ -103,6 +127,14 @@ export class CapybaraCafe {
     if (this.moon) {
       gsap.to(this.moon.rotation, {
         x: isNight ? Math.PI : 0,
+        duration: 1.5,
+        ease: "power2.inOut",
+      });
+    }
+
+    if (this.areaLight) {
+      gsap.to(this.areaLight, {
+        intensity: isNight ? 2 : 0,
         duration: 1.5,
         ease: "power2.inOut",
       });
