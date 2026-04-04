@@ -1,6 +1,6 @@
 # 😎💪💪💪 ALPHA CHAD'S COZY CAFEZZZZZZ ☕☕☕
 
-**[Live site](https://alpha-chads-cozy-cafes.vercel.app/)** | **[Tutorial](https://youtu.be/AD01pTr3gvw)**
+**[Live site](https://alpha-chads-cozy-cafes.vercel.app/)** | **[Tutorial](https://youtu.be/rcts2vez3vA)**
 
 This repo contains code of Alpha Chad's Cozy Cafe for a YouTube tutorial!! It's a concept portfolio, Chad is not a real person and Capybara's don't exist. It's a portfolio website created with [Blender](https://www.blender.org/), [Three.js](https://threejs.org/).
 

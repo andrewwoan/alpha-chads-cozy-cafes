@@ -220,11 +220,11 @@ export class Raycaster {
       }
     });
 
-    window.addEventListener("click", (e) => {
-      if (!this.isModalOpen) return;
-      if (this.isClickInsideModal(e)) return;
-      this.closeAllActiveModals();
-    });
+    // window.addEventListener("click", (e) => {
+    //   if (!this.isModalOpen) return;
+    //   if (this.isClickInsideModal(e)) return;
+    //   this.closeAllActiveModals();
+    // });
 
     this.canvas.addEventListener("click", handleClickAndTouch);
     this.canvas.addEventListener("touchend", handleClickAndTouch);
