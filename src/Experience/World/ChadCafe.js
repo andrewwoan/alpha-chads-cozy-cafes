@@ -295,7 +295,7 @@ export class ChadCafe {
       {
         mesh: intersectObjects["Raycaster_YouTube_Contact"],
         type: "url",
-        url: "https://youtube.com/@andrewwoan",
+        url: "https://youtu.be/rcts2vez3vA",
         pairKey: "youtube",
       },
     ]);
