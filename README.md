@@ -15,7 +15,7 @@ This repo contains code of Alpha Chad's Cozy Cafe for a YouTube tutorial!! It's 
 
 # Extra info
 
-- None as of right now.
+- 🚨🚨🚨 ONLINE COMPRESSION TOOLS MIGHT MESS UP YOUR OBJECT'S SCALE VALUE!!! 🚨🚨🚨
 
 # Areas of improvement / things to do
 
