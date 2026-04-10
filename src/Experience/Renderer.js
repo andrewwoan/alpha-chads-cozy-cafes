@@ -18,8 +18,6 @@ import { Experience } from "./Experience";
 export class Renderer {
   constructor() {
     this.experience = Experience.getInstance();
-
-    this.init();
   }
 
   async init() {

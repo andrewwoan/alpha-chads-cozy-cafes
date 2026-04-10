@@ -22,4 +22,4 @@ This repo contains code of Alpha Chad's Cozy Cafe for a YouTube tutorial!! It's 
 - Better animations
 - More interactions
 - Performance monitoring and disabling stuff
-- Should probably instance some reptitive geos like the fences, lights, even the building segments, just need one level
+- Should probably instance some reptitive models like the fences, lights, even the building segments, just need one level
