@@ -16,6 +16,7 @@ This repo contains code of Alpha Chad's Cozy Cafe for a YouTube tutorial!! It's 
 # Extra info
 
 - 🚨🚨🚨 ONLINE COMPRESSION TOOLS MIGHT MESS UP YOUR OBJECT'S SCALE VALUE!!! 🚨🚨🚨
+- SORRY FORGOT TO REMOVE EXTRA RENDEREER INIT AFTER CALLING IT IN EXPERIENCE.JS.
 
 # Areas of improvement / things to do
 
